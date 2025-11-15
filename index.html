@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Savings Survey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBd9XeisWiNIm3Zm8GjqH-Rvz1fh9DB50I&libraries=places&callback=initMap">
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6268TC1FWW"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-6268TC1FWW');
+
+      function trackEvent(action, label, value = null) {
+        const params = {
+          event_category: 'Survey',
+          event_label: label
+        };
+        if (value !== null) params.value = value;
+        gtag('event', action, params);
+      }
+    </script>
+
+    <style>
+        :root {--primary:#2563eb;--primary-light:#3b82f6;--success:#10b981;--gray:#6b7280;--light:#f3f4f6;--dark:#1f2937;--radius:12px;--shadow:0 4px 6px -1px rgba(0,0,0,0.1);}
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);color:var(--dark);min-height:100vh;padding:20px;}
+        .container{max-width:600px;margin:40px auto;background:white;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+        .progress-bar{height:6px;background:#e5e7eb;position:relative;}
+        .progress{height:100%;background:var(--primary);width:0%;transition:width .4s ease;}
+        .section{display:none;padding:32px;animation:fadeIn .4s ease-out;}
+        .active{display:block;}
+        h2{font-size:1.75rem;font-weight:600;margin-bottom:16px;color:var(--dark);}
+        h3{font-size:1.25rem;font-weight:600;margin-bottom:12px;color:var(--dark);}
+        p{margin-bottom:16px;color:var(--gray);}
+
+        .utility-spotlight {
+            background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+        }
+        .utility-logo {
+            width: 80px; height: 80px; object-fit: contain;
+            border-radius: 8px; margin-bottom: 12px;
+            border: 1px solid #e5e7eb; background: white;
+        }
+        .utility-name {
+            font-size: 1.5rem; font-weight: 700; color: var(--primary); margin: 8px 0;
+        }
+        .utility-tagline {font-size: 0.95rem; color:var(--gray);}
+
+        input[type=text],input[type=tel],input[type=email],input[type=range]{
+            width:100%;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:1rem;margin-bottom:16px;transition:border .2s;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+        input.error{border-color:#ef4444;}
+        .error-msg{color:#ef4444;font-size:0.875rem;margin-top:-12px;margin-bottom:12px;display:none;}
+        button{background:var(--primary);color:white;border:none;padding:12px 24px;font-size:1rem;font-weight:500;border-radius:8px;cursor:pointer;transition:background .2s;margin-right:12px;margin-bottom:12px;}
+        button:hover{background:var(--primary-light);}
+        .btn-group{display:flex;gap:12px;flex-wrap:wrap;}
+        .back-btn{background:#6b7280;color:white;}
+        .back-btn:hover{background:#4b5563;}
+        #map{height:400px;width:100%;border-radius:8px;margin:16px 0;}
+        .youtube-container{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:20px 0;box-shadow:var(--shadow);}
+        .youtube-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;}
+        .thankyou{text-align:center;padding:48px 32px;}
+        .thankyou h2{color:var(--success);font-size:2.25rem;margin-bottom:16px;}
+        .check-icon{width:80px;height:80px;background:var(--success);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:2.5rem;}
+
+        .consent-box {
+            background:#f0fdf4;
+            border:2px solid #bbf7d0;
+            border-radius:12px;
+            padding:16px;
+            margin:20px 0;
+            font-size:0.95rem;
+            line-height:1.5;
+        }
+        .consent-box label {
+            display:flex;
+            align-items:flex-start;
+            gap:10px;
+            cursor:pointer;
+        }
+        .consent-box input[type=checkbox] {
+            margin-top:3px;
+            accent-color:var(--success);
+        }
+        .highlight {
+            background:#fef3c7;
+            padding:2px 6px;
+            border-radius:4px;
+            font-weight:700;
+            color:#92400e;
+        }
+
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+        @media(max-width:480px){.container{margin:20px 10px;}.btn-group{flex-direction:column;}button{width:100%;}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+
+    <!-- PAGE 1: ZIP CODE -->
+    <div id="zip-page" class="section active" data-step="1">
+        <h2>Enter Your Zip Code</h2>
+        <p>We’ll find your electricity provider.</p>
+        <input type="text" id="zip" placeholder="e.g. 90210" maxlength="5">
+        <div class="btn-group">
+            <button onclick="submitZip()">Next</button>
+        </div>
+    </div>
+
+    <!-- PAGE 2: UTILITY + BILL SLIDER + RENTER/OWNER -->
+    <div id="bill-page" class="section" data-step="2">
+        <div id="utility-spotlight" class="utility-spotlight" style="display:none;">
+            <img id="utility-logo" class="utility-logo" src="" alt="Utility Logo">
+            <div id="utility-name" class="utility-name"></div>
+            <div class="utility-tagline">Your current electricity provider</div>
+        </div>
+
+        <div id="bill-slider-section" style="display:none;">
+            <h3>What’s your average monthly electric bill?</h3>
+            <p style="color:var(--gray);font-size:0.9rem;margin-bottom:16px;">Slide to estimate</p>
+            <input type="range" id="bill-slider" min="50" max="500" value="150" step="5">
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:0.9rem;color:var(--gray);">
+                <span>$50</span>
+                <span id="bill-value" style="font-weight:600;color:var(--primary);">$150</span>
+                <span>$500+</span>
+            </div>
+        </div>
+
+        <h2 style="margin-top:32px;">Are You a Renter or Homeowner?</h2>
+        <p>We’ll tailor your experience.</p>
+        <div class="btn-group">
+            <button onclick="selectType('renter'); trackEvent('click', 'Renter Selected')">I’m a Renter</button>
+            <button onclick="selectType('owner'); trackEvent('click', 'Homeowner Selected')">I’m a Homeowner</button>
+        </div>
+        <div class="btn-group" style="margin-top:20px;">
+            <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+    <!-- RENTER - EXTERNAL LINK -->
+    <div id="renter-section" class="section" data-step="3">
+        <h2>Great! Here’s How It Works</h2>
+        <div class="youtube-container">
+            <iframe id="renter-video" src="https://www.youtube.com/embed/3u5DALLHZDI?si=nORXUVcpWtIYAAQF&autoplay=1&mute=1&rel=0" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <p style="text-align:center; margin-top:24px;">
+            <a href="https://get.thinkenergy.com/Tourbillon" target="_blank" 
+               onclick="trackEvent('click', 'Explore Think Energy')"
+               style="background:var(--primary);color:white;padding:12px 28px;border-radius:8px;font-weight:500;text-decoration:none;display:inline-block;font-size:1rem;">
+               Explore Think Energy
+            </a>
+        </p>
+        <div class="btn-group" style="margin-top:20px;">
+            <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+    <!-- OWNER ADDRESS -->
+    <div id="owner-address" class="section" data-step="4">
+        <h2>Confirm Your Home</h2>
+        <p>Start typing your address — we’ll suggest matches.</p>
+        <input type="text" id="address" placeholder="123 Main St, Austin, TX" autocomplete="off">
+        <div class="btn-group">
+            <button onclick="showSatelliteMap()">Show My Home</button>
+            <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+    <!-- SATELLITE MAP -->
+    <div id="satellite-section" class="section" data-step="5">
+        <h2>Is This Your Home?</h2>
+        <p>Drag the pin if it’s slightly off.</p>
+        <div id="map"></div>
+        <div class="btn-group" style="margin-top:20px;">
+            <button onclick="confirmLocation()">Yes, Confirm</button>
+            <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+    <!-- CONTACT + CONSENT -->
+    <div id="contact-section" class="section" data-step="6">
+        <h2>Almost Done!</h2>
+        <p>Schedule a free consultation.</p>
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="tel" id="phone" placeholder="(512) 555-1234" maxlength="14">
+        <div class="error-msg" id="phone-error">Please enter a valid 10-digit phone number.</div>
+        <input type="email" id="email" placeholder="Email Address">
+        <div class="error-msg" id="email-error">Please enter a valid email address.</div>
+
+        <div class="consent-box">
+            <label>
+                <input type="checkbox" id="consent" required>
+                <span>
+                    I consent to be contacted at the phone number and email provided, even if registered on a national or state Do Not Call list. 
+                    <strong class="highlight">Your information will NEVER be shared or sold.</strong>
+                </span>
+            </label>
+        </div>
+        <div class="error-msg" id="consent-error">You must agree to be contacted.</div>
+
+        <div class="btn-group">
+            <button onclick="selectPreference('virtual'); trackEvent('click', 'Virtual Call')">Virtual Call</button>
+            <button onclick="selectPreference('inperson'); trackEvent('click', 'In-Person Visit')">In-Person Visit</button>
+        </div>
+        <div class="btn-group" style="margin-top:20px;">
+            <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+    <!-- THANK YOU -->
+    <div id="thankyou" class="section thankyou" data-step="7">
+        <div class="check-icon">Checkmark</div>
+        <h2>Thank You, <span id="user-name"></span>!</h2>
+        <p>We’ll contact you soon to schedule your <strong><span id="appt-type"></span></strong> appointment.</p>
+        <p style="margin-top:24px;font-size:0.9rem;color:var(--gray);">
+            Questions? Email <a href="mailto:support@thinkenergy.com" style="color:var(--primary);">support@thinkenergy.com</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    const NREL_KEY = '3JfgeN3zS7bwbacaGq8hRiFgIy10vCwif1cTJJ6Z';
+    let map, marker, autocomplete;
+    const data = { bill: 150 }; // default bill
+    const totalSteps = 7;
+    let currentStep = 1;
+
+    function initMap() {
+        const addressInput = document.getElementById('address');
+        if (addressInput) {
+            autocomplete = new google.maps.places.Autocomplete(addressInput, {
+                types: ['address'],
+                componentRestrictions: { country: 'us' }
+            });
+            autocomplete.addListener('place_changed', () => {
+                const place = autocomplete.getPlace();
+                if (place.formatted_address) {
+                    addressInput.value = place.formatted_address;
+                }
+            });
+        }
+    }
+
+    function updateProgress(step) {
+        currentStep = step;
+        const percent = (step / totalSteps) * 100;
+        document.getElementById('progress').style.width = percent + '%';
+    }
+
+    function hideAll() {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    }
+
+    function goBack() {
+        if (currentStep <= 1) return;
+        const prev = currentStep - 1;
+        hideAll();
+        const sections = ['zip-page', 'bill-page', 'renter-section', 'owner-address', 'satellite-section', 'contact-section', 'thankyou'];
+        document.getElementById(sections[prev - 1]).classList.add('active');
+        updateProgress(prev);
+    }
+
+    // PHONE FORMAT
+    document.getElementById('phone').addEventListener('input', function(e) {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
+
+    // BILL SLIDER
+    const billSlider = document.getElementById('bill-slider');
+    const billValue = document.getElementById('bill-value');
+    if (billSlider && billValue) {
+        billSlider.addEventListener('input', () => {
+            const val = billSlider.value;
+            billValue.textContent = `$${val}`;
+            data.bill = parseInt(val);
+        });
+    }
+
+    async function submitZip() {
+        const zip = document.getElementById('zip').value.trim();
+        if (!/^\d{5}$/.test(zip)) return alert('Enter a valid 5-digit zip code.');
+        data.zip = zip;
+
+        const geo = await fetch(`https://nominatim.openstreetmap.org/search?postalcode=${zip}&country=US&format=json&limit=1`)
+                         .then(r => r.json());
+        if (!geo.length) return alert('Zip code not found.');
+
+        const {lat, lon} = geo[0];
+        data.lat = lat; data.lon = lon;
+
+        const nrel = await fetch(`https://developer.nrel.gov/api/utility_rates/v3.json?api_key=${NREL_KEY}&lat=${lat}&lon=${lon}`)
+                          .then(r => r.json());
+        const provider = nrel.outputs?.utility_name || 'Local Utility';
+        data.provider = provider;
+
+        const domainGuess = provider.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com';
+        const logoImg = document.getElementById('utility-logo');
+        const nameEl = document.getElementById('utility-name');
+
+        nameEl.textContent = provider;
+        document.getElementById('utility-spotlight').style.display = 'block';
+        document.getElementById('bill-slider-section').style.display = 'block';
+
+        const clearbitUrl = `https://logo.clearbit.com/${domainGuess}?size=200`;
+        logoImg.src = clearbitUrl;
+        logoImg.onerror = () => {
+            logoImg.src = 'https://via.placeholder.com/80/2563eb/ffffff?text=Lightning';
+        };
+
+        hideAll();
+        document.getElementById('bill-page').classList.add('active');
+        updateProgress(2);
+    }
+
+    function selectType(type) {
+        data.type = type;
+        hideAll();
+        const next = type === 'renter' ? 'renter-section' : 'owner-address';
+        document.getElementById(next).classList.add('active');
+        updateProgress(type === 'renter' ? 3 : 4);
+    }
+
+    async function showSatelliteMap() {
+        const address = document.getElementById('address').value.trim();
+        if (!address) return alert('Please enter your address.');
+
+        data.address = address;
+        let lat, lon;
+
+        const place = autocomplete.getPlace();
+        if (place && place.geometry) {
+            lat = place.geometry.location.lat();
+            lon = place.geometry.location.lng();
+        } else {
+            const geo = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`)
+                             .then(r => r.json());
+            if (!geo.length) return alert('Address not found.');
+            lat = parseFloat(geo[0].lat);
+            lon = parseFloat(geo[0].lon);
+        }
+
+        data.lat = lat; data.lon = lon;
+
+        hideAll();
+        document.getElementById('satellite-section').classList.add('active');
+        updateProgress(5);
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat, lng: lon },
+            zoom: 19,
+            mapTypeId: 'satellite'
+        });
+
+        marker = new google.maps.Marker({
+            position: { lat, lng: lon },
+            map: map,
+            draggable: true
+        });
+
+        marker.addListener('dragend', () => {
+            const pos = marker.getPosition();
+            data.lat = pos.lat();
+            data.lon = pos.lng();
+        });
+    }
+
+    function confirmLocation() {
+        hideAll();
+        document.getElementById('contact-section').classList.add('active');
+        updateProgress(6);
+    }
+
+    function selectPreference(pref) {
+        const name = document.getElementById('name').value.trim();
+        const phoneInput = document.getElementById('phone').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const consent = document.getElementById('consent').checked;
+
+        document.getElementById('phone').classList.remove('error');
+        document.getElementById('email').classList.remove('error');
+        document.getElementById('consent-error').style.display = 'none';
+        document.getElementById('phone-error').style.display = 'none';
+        document.getElementById('email-error').style.display = 'none';
+
+        let valid = true;
+
+        if (!name) { alert('Please enter your full name.'); return; }
+
+        const cleanPhone = phoneInput.replace(/\D/g, '');
+        if (cleanPhone.length !== 10) {
+            document.getElementById('phone').classList.add('error');
+            document.getElementById('phone-error').style.display = 'block';
+            valid = false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('email').classList.add('error');
+            document.getElementById('email-error').style.display = 'block';
+            valid = false;
+        }
+
+        if (!consent) {
+            document.getElementById('consent-error').style.display = 'block';
+            valid = false;
+        }
+
+        if (!valid) return;
+
+        data.name = name;
+        data.phone = cleanPhone;
+        data.email = email;
+        data.preference = pref;
+
+        // TRACK BILL + LEAD
+        trackEvent('bill_entered', `$${data.bill}`, data.bill);
+        trackEvent('lead_submitted', pref === 'virtual' ? 'Virtual Call' : 'In-Person Visit', 1);
+
+        document.getElementById('user-name').textContent = name.split(' ')[0];
+        document.getElementById('appt-type').textContent = pref === 'virtual' ? 'virtual call' : 'in-person visit';
+
+        hideAll();
+        document.getElementById('thankyou').classList.add('active');
+        updateProgress(7);
+
+        console.log('LEAD SUBMITTED:', data);
+    }
+
+    const observer = new MutationObserver(() => {
+        const video = document.getElementById('renter-video');
+        if (video && document.getElementById('renter-section').classList.contains('active')) {
+            video.src = video.src;
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    updateProgress(1);
+</script>
+</body>
+</html>
