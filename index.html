@@ -259,7 +259,7 @@
     const NREL_KEY = '3JfgeN3zS7bwbacaGq8hRiFgIy10vCwif1cTJJ6Z';
     
     // REPLACE THIS WITH YOUR WEB APP URL AFTER DEPLOYING
-    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsuDqtDtbcuqfAwqYgmHrILxdnneNQf75ke3vNOwHt-_yh5MhaMHzUlchFC2hPXeX9fw/exec';
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxyb_IUr4P8gdJBDkGgwVDfSNfmFPy_oW0BVuWw3mvzICezPNRkhgShw4JUZ1rZZ_436g/exec';
 
     let map, marker, autocomplete;
     const data = { bill: 150 };
@@ -457,7 +457,7 @@
         trackEvent('lead_submitted', pref === 'virtual' ? 'Virtual Call' : 'In-Person Visit', 1);
 
         // SAVE TO GOOGLE SHEETS
-        if (SHEET_URL !== 'https://script.google.com/macros/s/AKfycbzsuDqtDtbcuqfAwqYgmHrILxdnneNQf75ke3vNOwHt-_yh5MhaMHzUlchFC2hPXeX9fw/exec') {
+        if (SHEET_URL !== 'https://script.google.com/macros/s/AKfycbxyb_IUr4P8gdJBDkGgwVDfSNfmFPy_oW0BVuWw3mvzICezPNRkhgShw4JUZ1rZZ_436g/exec') {
             fetch(SHEET_URL, {
                 method: 'POST',
                 mode: 'no-cors',
